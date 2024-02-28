@@ -82,7 +82,32 @@ loadDataWithNoCallback(`products/${productId}`)
                     </div>
                 </div>
             </div>`;
+
         productContainer.appendChild(infoDiv);
+
+        
+        // Ajouter des boutons d'augmentation et de diminution de la quantité de produit
+        let quantityInput = infoDiv.querySelector('.quantity');
+        let plusButton = infoDiv.querySelector('.quantity-right-plus');
+        let minusButton = infoDiv.querySelector('.quantity-left-minus');
+    
+        if (quantityInput && plusButton && minusButton) {
+
+            plusButton.addEventListener('click', function() {
+                console.log('Plus button clicked');
+                quantityInput.value = parseInt(quantityInput.value, 10) + 1;
+            });
+    
+            minusButton.addEventListener('click', function() {
+                console.log('Minus button clicked');
+                if (parseInt(quantityInput.value, 10) > 1) {
+                    quantityInput.value = parseInt(quantityInput.value, 10) - 1;
+                }
+            });
+        } else {
+            console.error('One or more elements not found. Check your selectors.');
+        }
+        
 
         productContainer.addEventListener('click', function(event) {
             if (event.target.classList.contains('add-to-cart')) {
@@ -117,7 +142,7 @@ loadDataWithNoCallback(`products/${productId}`)
         `
 
         productDescriptionContainer.appendChild(descriptionLongueDiv)
-    
+
     }
     
 
