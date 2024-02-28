@@ -158,7 +158,8 @@ function updateProductsDOM(produits) {
                         </span>
 
                         <!-- Champ de saisie de la quantité -->
-                        <input type="text" name="quantity" class="form-control input-number quantity"  value="1">
+                        <input type="text" name="quantity" class="form-control input-number quantity" value="1" style="width: 60px;">
+
 
                         <!-- Bouton pour augmenter la quantité -->
                         <span class="input-group-btn">
@@ -171,6 +172,28 @@ function updateProductsDOM(produits) {
                     <a href="#" class="nav-link add-to-cart">Add to Cart <svg width="18" height="18"><use xlink:href="#cart"></use></svg></a>
                 </div>
             </div>`;
+
+            // Ajouter des boutons d'augmentation et de diminution de la quantité de produit
+            let quantityInput = productDiv.querySelector('.quantity');
+            let plusButton = productDiv.querySelector('.quantity-right-plus');
+            let minusButton = productDiv.querySelector('.quantity-left-minus');
+    
+            if (quantityInput && plusButton && minusButton) {
+                plusButton.addEventListener('click', function() {
+                    console.log('Plus button clicked');
+                    quantityInput.value = parseInt(quantityInput.value, 10) + 1;
+                });
+    
+                minusButton.addEventListener('click', function() {
+                    console.log('Minus button clicked');
+                    if (parseInt(quantityInput.value, 10) > 1) {
+                        quantityInput.value = parseInt(quantityInput.value, 10) - 1;
+                    }
+                });
+            } else {
+                console.error('One or more elements not found. Check your selectors.');
+            }
+
 
         // Ajout du produit au conteneur des produits
         produitsList.appendChild(productDiv);
