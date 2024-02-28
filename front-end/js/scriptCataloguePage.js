@@ -6,8 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
     loadData("categories", updateCategoriesDOM);
     loadData("rayons", updateRayonsDOM);
     loadData("products", updateProductsDOM);
-    
 });
+
+
 
 // Fonction pour mettre à jour le DOM avec les catégories
 function updateCategoriesDOM(categories) {
@@ -66,6 +67,7 @@ function updateProductsDOM(produits) {
         // Création d'un nouvel élément <div> pour chaque produit
         let productDiv = document.createElement('div');
         productDiv.classList.add('col');
+        productDiv.setAttribute('data-product-id',product.codeP)
         productDiv.innerHTML = `
             <div class="product-item">
                 <!-- Bouton pour ajouter aux favoris -->
@@ -104,13 +106,47 @@ function updateProductsDOM(produits) {
                         </span>
                     </div>
                     <!-- Bouton "Ajouter au panier" -->
-                    <a href="#" class="nav-link">Add to Cart <svg width="18" height="18"><use xlink:href="#cart"></use></svg></a>
+                    <a href="#" class="nav-link add-to-cart">Add to Cart <svg width="18" height="18"><use xlink:href="#cart"></use></svg></a>
                 </div>
             </div>`;
 
         // Ajout du produit au conteneur des produits
         produitsList.appendChild(productDiv);
+
+        // 添加事件委托，捕获所有"Add to Cart"按钮的点击事件
+        produitsList.addEventListener('click', function(event) {
+            if (event.target.classList.contains('add-to-cart')) {
+                event.preventDefault();
+                addToCart(productDiv);
+            }
+        });
     });
 
 
+
 }
+
+// function pour ajouter au panier
+function addToCart(productElement) {
+    var productId = productElement.getAttribute('data-product-id');
+    var quantity = parseInt(productElement.querySelector('.quantity').value);
+    console.log("Quantity:", quantity);
+    console.log("Product ID:", productId);
+
+    var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    var existingItemIndex = cartItems.findIndex(item => item.id === productId);
+
+    if (existingItemIndex !== -1) {
+        // 如果存在相同的产品ID，则更新数量
+        cartItems[existingItemIndex].quantity += quantity;
+    } else {
+        // 否则将新的产品添加到数组中
+        cartItems.push({ id: productId, quantity: quantity });
+    }
+
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    alert('Article ajouté dans le panier!');
+}
+
+
+
