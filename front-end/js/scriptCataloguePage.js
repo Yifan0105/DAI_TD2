@@ -1,11 +1,64 @@
 import { loadData } from './loaders.js';
-
+import { loadDataWithNoCallback } from './loaders.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Mettez vos appels de méthodes ici
     loadData("categories", updateCategoriesDOM);
     loadData("rayons", updateRayonsDOM);
-    loadData("products", updateProductsDOM);
+
+});
+
+let pageNumber = 1
+//Object that stores all the products
+let allProducts = [];
+
+let productsPerPage = 9;
+
+loadDataWithNoCallback("products")
+    .then((produits) => {
+        // Utiliser les données récupérées
+        allProducts = produits;
+        console.log(allProducts)
+        updateProductsDOM(produits);
+    })
+    .catch(error => {
+        // Gérer les erreurs ici
+        console.error('Une erreur est survenue lors du chargement des produits :', error);
+    });
+
+// Sélectionnez le conteneur de la liste de pagination
+const paginationContainer = document.querySelector('.pagination');
+
+// Ajoutez un écouteur d'événements au clic sur le conteneur de la liste de pagination
+paginationContainer.addEventListener('click', function(event) {
+// Vérifiez si l'élément cliqué est un lien de pagination
+if (event.target.classList.contains('page-link')) {
+    // Empêche le comportement par défaut du lien
+    event.preventDefault();
+
+    event.target.parentNode.classList.add("active");
+
+    const previousPage = paginationContainer.querySelector(`a[data-page="${pageNumber}"]`).parentNode;
+    previousPage.classList.remove("active");
+
+    // Récupère le numéro de page à partir de l'attribut data-page
+    pageNumber = parseInt(event.target.dataset.page);
+
+    // Calcul de l'indice de départ et de fin pour les produits de la page actuelle
+    const startIndex = (pageNumber - 1) * productsPerPage;
+    const endIndex = startIndex + productsPerPage;
+
+    // Sélection des produits de la page actuelle
+    const productsOnPage = allProducts.slice(startIndex, endIndex);
+
+    console.log(productsOnPage)
+    console.log(allProducts)
+
+    updateProductsDOM(productsOnPage)
+
+    // Utilisez le numéro de page comme vous le souhaitez (par exemple, effectuez une action en fonction de la page sélectionnée)
+    console.log('Numéro de page sélectionné :', pageNumber);
+    }
 });
 
 
@@ -63,7 +116,16 @@ function updateProductsDOM(produits) {
     // Nettoyer le contenu existant
     produitsList.innerHTML = '';
 
+    // Calcul de l'indice de départ et de fin pour les produits de la page actuelle
+    const startIndex = (pageNumber - 1) * productsPerPage;
+    const endIndex = startIndex + productsPerPage;
+
+    // Sélection des produits de la page actuelle
+    produits = allProducts.slice(startIndex, endIndex);
+
+
     produits.forEach(product => {
+
         // Création d'un nouvel élément <div> pour chaque produit
         let productDiv = document.createElement('div');
         productDiv.classList.add('col');
@@ -75,15 +137,15 @@ function updateProductsDOM(produits) {
 
                 <!-- Image du produit -->
                 <figure>
-                    <a href="single-product.html?pro=${product.codeP}" title="${product.nomP}">
+                    <a href="single-product.html?productId=${product.codeP}" title="${product.nomP}">
                         <img src="http://localhost:8080/static/images/${product.productImage}" alt="Product Image" class="tab-image">
                     </a>
                 </figure>
 
                 <!-- Titre, quantité, évaluation, prix du produit -->
                 <h3>${product.nomP}</h3>
-                <span class="qty">1 Unité</span><span class="rating"><svg width="24" height="24" class="text-primary"><use xlink:href="#star-solid"></use></svg> 4.5</span>
-                <span class="price">$${product.prixP}</span>
+                <span class="qty">1 Unité</span>
+                <span class="price">${product.prixP} €</span>
 
                 <!-- Sélecteur de quantité et bouton "Ajouter au panier" -->
                 <div class="d-flex align-items-center justify-content-between">
@@ -96,7 +158,7 @@ function updateProductsDOM(produits) {
                         </span>
 
                         <!-- Champ de saisie de la quantité -->
-                        <input type="text" name="quantity" class="form-control input-number quantity" value="1">
+                        <input type="text" name="quantity" class="form-control input-number quantity"  value="1">
 
                         <!-- Bouton pour augmenter la quantité -->
                         <span class="input-group-btn">
