@@ -82,6 +82,7 @@ CSS STRUCTURE:
 7. OTHER PAGES
   7.1 Product detail
   7.2 Shop page
+  
 
     
 /*--------------------------------------------------------------
@@ -721,6 +722,8 @@ h1,h2,h3,h4,h5,h6 {
   }
 }
 
-.cat-item:hover {
-  cursor: pointer;
+.input-number {
+  width: 45px !important;
 }
+
+
