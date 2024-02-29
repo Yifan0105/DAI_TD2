@@ -8,17 +8,44 @@ document.addEventListener('DOMContentLoaded', function() {
             paniersData = p;
             updateCartDom(p);
             displayTotalPrice();
+            
+            // 调用按钮点击事件处理程序
+            bindQuantityButtons();
         }) 
         .catch(error => {
             console.error('Une erreur est survenue lors du chargement des produits :', error);
         });
 });
 
+// 新增一个函数，用于绑定按钮点击事件处理程序
+function bindQuantityButtons() {
+    let quantityButtons = document.querySelectorAll('.btn-number');
+    quantityButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            let index = parseInt(event.target.dataset.index);
+            let quantityInput = document.querySelector(`.input-number[data-index="${index}"]`);
+            let currentValue = parseInt(quantityInput.value);
+            let type = event.target.dataset.type;
+
+            if (type === "minus") {
+                if (currentValue > 1) {
+                    quantityInput.value = currentValue - 1;
+                }
+            } else if (type === "plus") {
+                quantityInput.value = currentValue + 1;
+            }
+
+            // 触发输入框的change事件，以便更新总价
+            quantityInput.dispatchEvent(new Event('change'));
+        });
+    });
+}
+
 function updateCartDom(paniers) {
     let tbody = document.getElementById('cartItems');
     tbody.innerHTML = '';
 
-    paniers.forEach(panier => {
+    paniers.forEach((panier, index) => {
         let price = panier.qteProduit * panier.produit.prixP;
         
         let cartInfos = document.createElement('tr');
@@ -40,17 +67,17 @@ function updateCartDom(paniers) {
                 </div>
             </td>
             <td class="py-4">
-                <div class="input-group product-qty w-50">
+                <div class="input-group product-qty">
                     <span class="input-group-btn">
-                        <button type="button" class="quantity-left-minus btn btn-light btn-number" data-type="minus">
+                        <button type="button" class="quantity-left-minus btn btn-light btn-number" data-type="minus" data-index="${index}">
                             <svg width="16" height="16">
                                 <use xlink:href="#minus"></use>
                             </svg>
                         </button>
                     </span>
-                    <input type="text" name="quantity" class="input-number" value="${panier.qteProduit}">
+                    <input type="text" name="quantity" class="input-number form-control" value="${panier.qteProduit}" data-index="${index}">
                     <span class="input-group-btn">
-                        <button type="button" class="quantity-right-plus btn btn-light btn-number" data-type="plus" data-field="">
+                        <button type="button" class="quantity-right-plus btn btn-light btn-number" data-type="plus" data-index="${index}">
                             <svg width="16" height="16">
                                 <use xlink:href="#plus"></use>
                             </svg>
@@ -74,17 +101,20 @@ function updateCartDom(paniers) {
             </td>
         `;
         tbody.appendChild(cartInfos);
+    });
 
-        // 获取数量输入框和商品总价元素
-        let quantityInput = cartInfos.querySelector('.input-number');
-        let totalPriceElement = cartInfos.querySelector('.total-price .money');
+    // 获取数量输入框和商品总价元素
+    let quantityInputs = document.querySelectorAll('.input-number');
+    let totalPriceElements = document.querySelectorAll('.total-price .money');
 
-        // 添加事件监听器，当数量改变时更新商品总价
+    // 添加事件监听器，当数量改变时更新商品总价
+    quantityInputs.forEach(quantityInput => {
         quantityInput.addEventListener('change', function(event) {
+            let index = parseInt(event.target.dataset.index);
             let newQuantity = parseInt(event.target.value);
             if (!isNaN(newQuantity) && newQuantity >= 0) {
-                let newPrice = newQuantity * panier.produit.prixP;
-                totalPriceElement.textContent = newPrice + "$";
+                let newPrice = newQuantity * paniers[index].produit.prixP;
+                totalPriceElements[index].textContent = newPrice + "$";
                 displayTotalPrice();
             }
         });
@@ -92,10 +122,6 @@ function updateCartDom(paniers) {
 }
 
 function displayTotalPrice() {
-    // let totalPrice = paniers.reduce((total, panier) => {
-    //     return total + panier.qteProduit * panier.produit.prixP;
-    // }, 0);
-
     let paniers = document.querySelectorAll('#cartItems tr');
     let totalPrice = 0;
 

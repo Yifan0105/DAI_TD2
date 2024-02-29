@@ -82,6 +82,7 @@ CSS STRUCTURE:
 7. OTHER PAGES
   7.1 Product detail
   7.2 Shop page
+  
 
     
 /*--------------------------------------------------------------
@@ -720,3 +721,9 @@ h1,h2,h3,h4,h5,h6 {
     height: 740px;
   }
 }
+
+.input-number {
+  width: 45px !important;
+}
+
+
