@@ -52,7 +52,10 @@ loadDataWithNoCallback(`products/${productId}`)
                     <h2 itemprop="name" class="display-6">${product.nomP}</h2>
                 </div>
                 <div class="product-price pt-3 pb-3">
-                    <strong class="text-primary display-6 fw-bold">$${product.prixP}</strong>
+                    <strong class="text-primary display-6 fw-bold">${product.prixP} €</strong>
+                </div>
+                <div class="product-price pt-3 pb-3">
+                    <span>Prix au kg: <strong class="fw-bold">${product.prixP} €</strong><span>
                 </div>
                 <p>${product.productDescriptionCourte}</p>
                 <div class="cart-wrap py-5">
@@ -80,6 +83,13 @@ loadDataWithNoCallback(`products/${productId}`)
                             </div>
                         </div>
                     </div>
+                </div>
+                
+                <div class="meta-item d-flex align-items-baseline">
+                    <h6 class="item-title no-margin pe-2">Catégorie(s):</h6>
+                    <ul class="select-list list-unstyled d-flex">
+                        ${product.categories.map((category, index) => `<li data-value="${category.nomC}" class="select-item">${category.nomC}${index !== product.categories.length - 1 ? ',  ' : ''}</li>`).join('')}
+                    </ul>
                 </div>
             </div>`;
 

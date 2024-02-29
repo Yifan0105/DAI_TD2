@@ -12,14 +12,16 @@ let pageNumber = 1
 //Object that stores all the products
 let allProducts = [];
 
+let currentProductsList = [];
+
 let productsPerPage = 9;
 
 loadDataWithNoCallback("products")
     .then((produits) => {
         // Utiliser les données récupérées
         allProducts = produits;
-        console.log(allProducts)
-        updateProductsDOM(produits);
+        currentProductsList = allProducts;
+        updateProductsDOM(produits, true);
     })
     .catch(error => {
         // Gérer les erreurs ici
@@ -49,12 +51,9 @@ if (event.target.classList.contains('page-link')) {
     const endIndex = startIndex + productsPerPage;
 
     // Sélection des produits de la page actuelle
-    const productsOnPage = allProducts.slice(startIndex, endIndex);
+    const productsOnPage = currentProductsList.slice(startIndex, endIndex);
 
-    console.log(productsOnPage)
-    console.log(allProducts)
-
-    updateProductsDOM(productsOnPage)
+    updateProductsDOM(productsOnPage, false)
 
     // Utilisez le numéro de page comme vous le souhaitez (par exemple, effectuez une action en fonction de la page sélectionnée)
     console.log('Numéro de page sélectionné :', pageNumber);
@@ -75,8 +74,12 @@ function updateCategoriesDOM(categories) {
   
         // Création d'un nouvel élément <a> pour le lien de la catégorie
         var link = document.createElement('a');
-        link.href = '#'; // Vous pouvez définir le lien réel ici si nécessaire
         link.textContent = category.nomC; // Supposons que le nom de la catégorie est stocké dans la propriété "name"
+        link.addEventListener('click', function() {
+            const filteredProducts = filterProductByCategorie(category);
+            console.log(filteredProducts);
+            updateProductsDOM(filteredProducts, false);
+        });
   
         // Ajout du lien à l'élément <li>
         listItem.appendChild(link);
@@ -91,7 +94,7 @@ function updateRayonsDOM(rayons) {
     
     let rayonsList = document.getElementById('rayonsList');
 
-    rayons.forEach(category => {
+    rayons.forEach(rayon => {
         // Création d'un nouvel élément <li> pour chaque catégorie
         var listItem = document.createElement('li');
         listItem.classList.add('rayon-item');
@@ -99,7 +102,9 @@ function updateRayonsDOM(rayons) {
         // Création d'un nouvel élément <a> pour le lien de la catégorie
         var link = document.createElement('a');
         link.href = '#'; // Vous pouvez définir le lien réel ici si nécessaire
-        link.textContent = category.nomR; // Supposons que le nom de la catégorie est stocké dans la propriété "name"
+        link.textContent = rayon.nomR; // Supposons que le nom de la catégorie est stocké dans la propriété "name"
+        link.addEventListener('click', filterProductByRayon(rayon))
+
   
         // Ajout du lien à l'élément <li>
         listItem.appendChild(link);
@@ -109,7 +114,25 @@ function updateRayonsDOM(rayons) {
     })
 }
 
-function updateProductsDOM(produits) {
+
+function filterProductByRayon(rayon) {
+        currentProductsList = allProducts.filter(product => {
+        // Vérifie si au moins une catégorie du produit a le même codeC que la catégorie recherchée
+        return product.rayons.some(ray => ray.codeR === rayon.codeR);
+    });
+    return currentProductsList;
+}
+
+function filterProductByCategorie(categorie) {
+        currentProductsList = allProducts.filter(product => {
+        // Vérifie si au moins une catégorie du produit a le même codeC que la catégorie recherchée
+        return product.categories.some(cat => cat.codeC === categorie.codeC);
+    });
+    return currentProductsList;
+}
+
+
+function updateProductsDOM(produits, init) {
 
     let produitsList = document.getElementById('productsList');
 
@@ -121,8 +144,11 @@ function updateProductsDOM(produits) {
     const endIndex = startIndex + productsPerPage;
 
     // Sélection des produits de la page actuelle
-    produits = allProducts.slice(startIndex, endIndex);
-
+    if (init) {
+        produits = allProducts.slice(startIndex, endIndex);
+    } else {
+        produits = produits.slice(startIndex, endIndex);
+    }
 
     produits.forEach(product => {
 
