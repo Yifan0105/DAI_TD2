@@ -159,7 +159,36 @@ function updateProductsDOM(produits, init) {
         productDiv.innerHTML = `
             <div class="product-item">
                 <!-- Bouton pour ajouter aux favoris -->
-                <a href="#" class="btn-wishlist"><svg width="24" height="24"><use xlink:href="#heart"></use></svg></a>
+                <a href="#" class="btn-wishlist" data-bs-toggle="modal" data-bs-target="#favoriteModal">
+                <svg width="24" height="24">
+                <use xlink:href="#heart">
+                </use></svg></a>
+
+                <!-- mondel -->
+                <div class="modal fade" id="favoriteModal" tabindex="-1" aria-labelledby="favoriteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="favoriteModalLabel">
+                                Pour ${product.nomP} <br>
+                                Choisir une liste de courses</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+
+                                <select class="form-select" id="favoriteList">
+                                    <option value="list1">Liste 1</option>
+                                    <option value="list2">Liste 2</option>
+                                </select>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                <button type="button" class="btn btn-primary" id="addToFavorite">Ajouter</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>               
 
                 <!-- Image du produit -->
                 <figure>
@@ -231,6 +260,19 @@ function updateProductsDOM(produits, init) {
                 addToCart(productDiv);
             }
         });
+
+        // add to list de course
+         document.getElementById('addToFavorite').addEventListener('click', function () {
+        // obtenir list de course
+        var selectedList = document.getElementById('favoriteList').value;
+
+        // TODO: faire lien avec back end
+        console.log('Product added to favorite list: ' + selectedList);
+
+        // close
+        var favoriteModal = new bootstrap.Modal(document.getElementById('favoriteModal'));
+        favoriteModal.hide();
+    });
     });
 
 
