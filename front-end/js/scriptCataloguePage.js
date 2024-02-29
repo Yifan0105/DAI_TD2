@@ -1,12 +1,13 @@
 import { loadData } from './loaders.js';
 import { loadDataWithNoCallback } from './loaders.js';
 
+
 document.addEventListener('DOMContentLoaded', function() {
     // Mettez vos appels de méthodes ici
     loadData("categories", updateCategoriesDOM);
     loadData("rayons", updateRayonsDOM);
-
 });
+
 
 let pageNumber = 1
 //Object that stores all the products
@@ -60,8 +61,6 @@ if (event.target.classList.contains('page-link')) {
     }
 });
 
-
-
 // Fonction pour mettre à jour le DOM avec les catégories
 function updateCategoriesDOM(categories) {
     
@@ -89,6 +88,7 @@ function updateCategoriesDOM(categories) {
     })
 }
 
+
 // Fonction pour mettre à jour le DOM avec les catégories
 function updateRayonsDOM(rayons) {
     
@@ -113,6 +113,8 @@ function updateRayonsDOM(rayons) {
         rayonsList.appendChild(listItem);
     })
 }
+
+
 
 
 function filterProductByRayon(rayon) {
@@ -150,6 +152,10 @@ function updateProductsDOM(produits, init) {
         produits = produits.slice(startIndex, endIndex);
     }
 
+
+    
+
+
     produits.forEach(product => {
 
         // Création d'un nouvel élément <div> pour chaque produit
@@ -176,10 +182,11 @@ function updateProductsDOM(produits, init) {
                             </div>
                             <div class="modal-body">
 
-                                <select class="form-select" id="favoriteList">
-                                    <option value="list1">Liste 1</option>
-                                    <option value="list2">Liste 2</option>
-                                </select>
+                            <div class="modal-body">
+                            <select class="form-select" id="favoriteList">
+                                <!-- Options added by updateListecourseDOM -->
+                            </select>
+                           </div>
 
                             </div>
                             <div class="modal-footer">
@@ -279,6 +286,8 @@ function updateProductsDOM(produits, init) {
 
 }
 
+
+
 // function pour ajouter au panier
 function addToCart(productElement) {
     var productId = productElement.getAttribute('data-product-id');
@@ -303,3 +312,43 @@ function addToCart(productElement) {
 
 
 
+//  liste_course/codec 
+loadDataWithNoCallback("liste_course/1")
+    .then((p) => {
+        console.log(p);
+        updateListecourseDOM(p);
+    }) 
+    .catch(error => {
+        // Gérer les erreurs ici
+        console.error('Une erreur :', error);
+    });
+
+function updateListecourseDOM(listCourses) {
+    console.log(listCourses)
+    var favoriteListSelect = document.getElementById('favoriteList');
+    
+    if (favoriteListSelect) {
+        favoriteListSelect.innerHTML = '';
+    
+        const defaultOption = document.createElement('option');
+        defaultOption.value = "";
+        defaultOption.text = "choisiez...";
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        favoriteListSelect.appendChild(defaultOption);
+    
+        listCourses.forEach(item => {
+            console.log(item)
+            const option = document.createElement('option');
+            
+            
+                console.log("if")
+                option.value = item;
+                option.text = item;
+                favoriteListSelect.appendChild(option);
+            
+        });
+    } else {
+        console.error('favoriteList element not found.');
+    }
+}
