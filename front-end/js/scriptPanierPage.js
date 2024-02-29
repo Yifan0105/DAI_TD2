@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then((p) => {
             console.log(p);
             updateCartDom(p);
+            displayTotalPrice(p)
         }) 
         .catch(error => {
             console.error('Une erreur est survenue lors du chargement des produits :', error);
@@ -82,7 +83,21 @@ function updateCartDom(paniers) {
             if (!isNaN(newQuantity) && newQuantity >= 0) {
                 let newPrice = newQuantity * panier.produit.prixP;
                 totalPriceElement.textContent = newPrice + "$";
+                displayTotalPrice(paniers)
             }
         });
     });
-}
+  }
+    function displayTotalPrice(paniers) {
+      let totalPrice = paniers.reduce((total, panier) => {
+          return total + panier.qteProduit * panier.produit.prixP;
+      }, 0);
+
+      let totalPriceContainer1 = document.getElementById('totalPriceContainer1');
+      let totalPriceContainer2 = document.getElementById('totalPriceContainer2');
+
+      totalPriceContainer1.innerText = `Prix total: ${totalPrice}$`;
+      totalPriceContainer2.innerText = `Prix total: ${totalPrice}$`;
+
+  }
+
