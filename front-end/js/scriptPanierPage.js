@@ -1,11 +1,13 @@
 import { loadDataWithNoCallback } from './loaders.js';
 
 document.addEventListener('DOMContentLoaded', function() {
+    let paniersData = [];
     loadDataWithNoCallback("panier/1")
         .then((p) => {
             console.log(p);
+            paniersData = p;
             updateCartDom(p);
-            displayTotalPrice(p)
+            displayTotalPrice();
         }) 
         .catch(error => {
             console.error('Une erreur est survenue lors du chargement des produits :', error);
@@ -83,21 +85,29 @@ function updateCartDom(paniers) {
             if (!isNaN(newQuantity) && newQuantity >= 0) {
                 let newPrice = newQuantity * panier.produit.prixP;
                 totalPriceElement.textContent = newPrice + "$";
-                displayTotalPrice(paniers)
+                displayTotalPrice();
             }
         });
     });
-  }
-    function displayTotalPrice(paniers) {
-      let totalPrice = paniers.reduce((total, panier) => {
-          return total + panier.qteProduit * panier.produit.prixP;
-      }, 0);
+}
 
-      let totalPriceContainer1 = document.getElementById('totalPriceContainer1');
-      let totalPriceContainer2 = document.getElementById('totalPriceContainer2');
+function displayTotalPrice() {
+    // let totalPrice = paniers.reduce((total, panier) => {
+    //     return total + panier.qteProduit * panier.produit.prixP;
+    // }, 0);
 
-      totalPriceContainer1.innerText = `Prix total: ${totalPrice}$`;
-      totalPriceContainer2.innerText = `Prix total: ${totalPrice}$`;
+    let paniers = document.querySelectorAll('#cartItems tr');
+    let totalPrice = 0;
 
-  }
+    paniers.forEach(panier => {
+        let priceElement = panier.querySelector('.total-price .money');
+        let price = parseFloat(priceElement.textContent.replace('$', ''));
+        totalPrice += price;
+    });
 
+    let totalPriceContainers = document.querySelectorAll('.total-price-container');
+
+    totalPriceContainers.forEach(container => {
+        container.innerText = `Prix total: ${totalPrice}$`;
+    });
+}
