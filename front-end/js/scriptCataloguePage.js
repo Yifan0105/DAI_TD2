@@ -176,7 +176,7 @@ function updateProductsDOM(produits, init) {
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="favoriteModalLabel">
-                                Pour ce produit<br>
+                                Pour ${product.nomP} <br>
                                 Choisir une liste de courses</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
@@ -319,21 +319,15 @@ loadDataWithNoCallback("liste_course/1")
         updateListecourseDOM(p);
     }) 
     .catch(error => {
+        // Gérer les erreurs ici
         console.error('Une erreur :', error);
     });
 
-
-    function updateListecourseDOM(listCourses) {
-        var favoriteListSelect = document.getElementById('favoriteList');
-        
-        if (!favoriteListSelect) {
-            console.error('favoriteList element not found.');
-            return; // SI NO. RETURN DIRECTEMENT
-        }
+function updateListecourseDOM(listCourses) {
+    console.log(listCourses)
+    var favoriteListSelect = document.getElementById('favoriteList');
     
-        console.log(listCourses);
-        console.log("check");
-    
+    if (favoriteListSelect) {
         favoriteListSelect.innerHTML = '';
     
         const defaultOption = document.createElement('option');
@@ -344,12 +338,17 @@ loadDataWithNoCallback("liste_course/1")
         favoriteListSelect.appendChild(defaultOption);
     
         listCourses.forEach(item => {
-            console.log(item);
-            console.log("check");
-    
+            console.log(item)
             const option = document.createElement('option');
-            option.value = item;
-            option.text = item;
-            favoriteListSelect.appendChild(option);
+            
+            
+                console.log("if")
+                option.value = item;
+                option.text = item;
+                favoriteListSelect.appendChild(option);
+            
         });
+    } else {
+        console.error('favoriteList element not found.');
     }
+}
