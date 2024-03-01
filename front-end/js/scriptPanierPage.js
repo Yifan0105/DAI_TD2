@@ -22,7 +22,7 @@ function bindQuantityButtons() {
     let quantityButtons = document.querySelectorAll('.btn-number');
     quantityButtons.forEach(button => {
         button.addEventListener('click', function(event) {
-            let index = parseInt(event.target.dataset.index);
+            let index = button.getAttribute('data-index')
             let quantityInput = document.querySelector(`.input-number[data-index="${index}"]`);
             let currentValue = parseInt(quantityInput.value);
             let type = event.target.dataset.type;
@@ -69,15 +69,15 @@ function updateCartDom(paniers) {
             <td class="py-4">
                 <div class="input-group product-qty">
                     <span class="input-group-btn">
-                        <button type="button" class="quantity-left-minus btn btn-light btn-number" data-type="minus" data-index="${index}">
+                        <button type="button" class="quantity-left-minus btn btn-light btn-number" data-type="minus" data-index="${panier.produit.codeP}">
                             <svg width="16" height="16">
                                 <use xlink:href="#minus"></use>
                             </svg>
                         </button>
                     </span>
-                    <input type="text" name="quantity" class="input-number form-control" value="${panier.qteProduit}" data-index="${index}">
+                    <input type="text" name="quantity" class="input-number form-control" value="${panier.qteProduit}" data-index="${panier.produit.codeP}">
                     <span class="input-group-btn">
-                        <button type="button" class="quantity-right-plus btn btn-light btn-number" data-type="plus" data-index="${index}">
+                        <button type="button" class="quantity-right-plus btn btn-light btn-number" data-type="plus" data-index="${panier.produit.codeP}">
                             <svg width="16" height="16">
                                 <use xlink:href="#plus"></use>
                             </svg>
@@ -106,16 +106,20 @@ function updateCartDom(paniers) {
     // 获取数量输入框和商品总价元素
     let quantityInputs = document.querySelectorAll('.input-number');
     let totalPriceElements = document.querySelectorAll('.total-price .money');
+    console.log(quantityInputs)
 
     // 添加事件监听器，当数量改变时更新商品总价
     quantityInputs.forEach(quantityInput => {
         quantityInput.addEventListener('change', function(event) {
             let index = parseInt(event.target.dataset.index);
             let newQuantity = parseInt(event.target.value);
-            if (!isNaN(newQuantity) && newQuantity >= 0) {
+            if (quantityInput && !isNaN(newQuantity) && newQuantity >= 0) {
                 let newPrice = newQuantity * paniers[index].produit.prixP;
                 totalPriceElements[index].textContent = newPrice + "$";
+                valider()
                 displayTotalPrice();
+
+                
             }
         });
     });
@@ -136,4 +140,60 @@ function displayTotalPrice() {
     totalPriceContainers.forEach(container => {
         container.innerText = `Prix total: ${totalPrice}$`;
     });
+  }
+
+
+// 新增一个函数，用于在用户新增商品数量时执行
+function valider() {
+  console.log('valider function called')
+  // 构建要发送到后端的数据结构
+  let dataToSend = [];
+  let cartItems = document.querySelectorAll('#cartItems tr');
+  console.log(cartItems)
+
+
+  cartItems.forEach(cartItem => {
+      let codeP = parseInt(cartItem.querySelector('.input-number').dataset.index);
+      let qteProduit = parseInt(cartItem.querySelector('.input-number').value);
+
+
+      let productData = {
+        codeP: codeP
+      }
+
+      let clientData = {
+        codeClient: 1
+      }
+
+      let requestBody = {
+        produit: productData,
+        client: clientData,
+        qteProduit: qteProduit
+      }
+
+      let url = "http://localhost:8080/v1/panier/modifier";
+
+  // 发送数据到后端
+  fetch(url, {
+      method: 'PUT',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+  })
+  .then(response => response.json())
+  .then(data => {
+      console.log('Success:', data);
+  })
+  .catch((error) => {
+      console.error('Error:', error);
+  });
+
+      
+  });
+
+  console.log("Data to send:", dataToSend);
+
+  // 发送数据到后端的 URL
+  
 }
