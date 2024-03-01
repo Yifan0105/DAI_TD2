@@ -68,7 +68,7 @@ if (event.target.classList.contains('page-link')) {
     // Sélection des produits de la page actuelle
     const productsOnPage = currentProductsList.slice(startIndex, endIndex);
 
-    //updateProductsDOM(productsOnPage, false)这里
+    updateProductsDOM(productsOnPage, false)
 
     // Utilisez le numéro de page comme vous le souhaitez (par exemple, effectuez une action en fonction de la page sélectionnée)
     console.log('Numéro de page sélectionné :', pageNumber);
@@ -91,7 +91,7 @@ function updateCategoriesDOM(categories) {
         link.addEventListener('click', function() {
             const filteredProducts = filterProductByCategorie(category);
             console.log(filteredProducts);
-            //updateProductsDOM(filteredProducts, false);这里
+            updateProductsDOM(filteredProducts, false);
         });
   
         // Ajout du lien à l'élément <li>
