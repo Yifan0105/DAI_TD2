@@ -30,17 +30,22 @@ let productsPerPage = 2;
 
 let allListesCourses = [];
 
-
-
-loadDataWithNoCallback("products")
-    .then((produits) => {
-        allProducts = produits
-        updateProductsDOM(produits)
-    }) 
-    .catch(error => {
+function fetchAndLoadData(endpoint) {
+    return loadDataWithNoCallback(endpoint)
+      .then((produits) => {
+        // Utiliser les données récupérées
+        allProducts = produits;
+        currentProductsList = allProducts;
+        updateProductsDOM(produits, true);
+      })
+      .catch(error => {
         // Gérer les erreurs ici
-        console.error('Une erreur :', error);
-    });
+        console.error('Une erreur est survenue lors du chargement des produits :', error);
+      });
+  }
+
+
+
 
   
   const queryParams = new URLSearchParams(window.location.search);
