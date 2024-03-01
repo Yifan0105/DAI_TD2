@@ -41,17 +41,7 @@ function fetchAndLoadData(endpoint) {
   }
 
 
-loadDataWithNoCallback("products")
-    .then((produits) => {
-        // Utiliser les données récupérées
-        allProducts = produits;
-        currentProductsList = allProducts;
-        updateProductsDOM(produits, true);
-    })
-    .catch(error => {
-        // Gérer les erreurs ici
-        console.error('Une erreur est survenue lors du chargement des produits :', error);
-    });
+
 
 // Sélectionnez le conteneur de la liste de pagination
 const paginationContainer = document.querySelector('.pagination');
