@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
             throw new Error('Empty response text');
           }
           const data = JSON.parse(text);
-          console.log(data)
+          console.log(data);
         })
         .catch(error => {
           console.error('Erreur lors de la récupération des données :', error);
