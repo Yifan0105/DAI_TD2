@@ -32,19 +32,17 @@ let allListesCourses = [];
 
 
 
-function fetchAndLoadData(endpoint) {
-    return loadDataWithNoCallback(endpoint)
-      .then((produits) => {
-        // Utiliser les données récupérées
-        allProducts = produits;
-        currentProductsList = allProducts;
-        updateProductsDOM(produits, true);
-      })
-      .catch(error => {
+loadDataWithNoCallback("products")
+    .then((produits) => {
+        allProducts = produits
+        updateProductsDOM(produits)
+    }) 
+    .catch(error => {
         // Gérer les erreurs ici
-        console.error('Une erreur est survenue lors du chargement des produits :', error);
-      });
-  }
+        console.error('Une erreur :', error);
+    });
+
+  
   const queryParams = new URLSearchParams(window.location.search);
   if (queryParams.has('inputValue')) {
     const inputValue = queryParams.get('inputValue');

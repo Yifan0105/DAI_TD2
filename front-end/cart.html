@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>FoodMart - Free eCommerce Grocery Store HTML Website Template</title>
+  <title>FoodMart eCommerce Grocery Store</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -197,10 +197,7 @@
 
         <div
           class="col-sm-8 col-lg-4 d-flex justify-content-end gap-5 align-items-center mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
-          <div class="support-box text-end d-none d-xl-block">
-            <span class="fs-6 text-muted">For Support?</span>
-            <h5 class="mb-0">+980-34984089</h5>
-          </div>
+          
 
           <ul class="d-flex justify-content-end list-unstyled m-0">
             <li>
@@ -238,8 +235,8 @@
           <div class="cart text-end d-none d-lg-block dropdown">
             <button class="border-0 bg-transparent d-flex flex-column gap-2 lh-1" type="button"
               data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
-              <span class="fs-6 text-muted dropdown-toggle">Your Cart</span>
-              <span class="cart-total fs-5 fw-bold">$1290.00</span>
+              <span class="fs-6 text-muted dropdown-toggle">Votre panier</span>
+              <span class="total-price-container" id="totalPriceContainer1" class="cart-total fs-5 fw-bold"></span>
             </button>
           </div>
         </div>
@@ -342,7 +339,7 @@
   <section class="py-5 mb-5" style="background: url(images/background-pattern.jpg);">
     <div class="container-fluid">
       <div class="d-flex justify-content-between">
-        <h1 class="page-title pb-2">Cart</h1>
+        <h1 class="page-title pb-2">Panier</h1>
         <nav class="breadcrumb fs-6">
           <a class="breadcrumb-item nav-link" href="#">Home</a>
           <a class="breadcrumb-item nav-link" href="#">Pages</a>
@@ -361,9 +358,9 @@
             <table class="table" id="productTable">              
               <thead>
                 <tr>
-                  <th scope="col" class="card-title text-uppercase text-muted">Product</th>
-                  <th scope="col" class="card-title text-uppercase text-muted">Quantity</th>
-                  <th scope="col" class="card-title text-uppercase text-muted">Subtotal</th>
+                  <th scope="col" class="card-title text-uppercase text-muted">Produit</th>
+                  <th scope="col" class="card-title text-uppercase text-muted">Quantité</th>
+                  <th scope="col" class="card-title text-uppercase text-muted">Total</th>
                   <th scope="col" class="card-title text-uppercase text-muted"></th>
                 </tr>
               </thead>
@@ -373,13 +370,19 @@
               </table>
             </div>
             <div class="button-wrap row g-2">
-              <div class="col-md-6"><button class="btn btn-dark py-3 px-4 text-uppercase btn-rounded-none w-100">Update
-                  Cart</button></div>
+              <div class="col-md-6"><button class="btn btn-dark py-3 px-4 text-uppercase btn-rounded-none w-100">Mettre à jour
+                  le panier</button></div>
               <div class="col-md-6"><button
-                  class="btn btn-dark py-3 px-4 text-uppercase btn-rounded-none w-100">Continue Shopping</button></div>
-              <div class="col-md-12"><button
-                  class="btn btn-primary py-3 px-4 text-uppercase btn-rounded-none w-100">Proceed to checkout</button>
+                  class="btn btn-dark py-3 px-4 text-uppercase btn-rounded-none w-100">Continuer à faire les courses</button></div>
+              <div class="col-md-12"><button id="validerButton"
+                  class="btn btn-primary py-3 px-4 text-uppercase btn-rounded-none w-100">Valider et payer</button>
               </div>
+
+              
+
+
+              <h1 class="total-price-container" id="totalPriceContainer2"></h1>
+
             </div>
           </div>
         </div>
@@ -388,51 +391,6 @@
     </div>
   </section>
 
-  <section class="py-5">
-    <div class="container-fluid">
-
-      <div class="bg-secondary py-5 my-5 rounded-5"
-        style="background: url('images/bg-leaves-img-pattern.png') no-repeat;">
-        <div class="container my-5">
-          <div class="row">
-            <div class="col-md-6 p-5">
-              <div class="section-header">
-                <h2 class="section-title display-4">Get <span class="text-dark">25% Discount</span> on your first
-                  purchase</h2>
-              </div>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dictumst amet, metus, sit massa posuere
-                maecenas. At tellus ut nunc amet vel egestas.</p>
-            </div>
-            <div class="col-md-6 p-5">
-              <form>
-                <div class="mb-3">
-                  <label for="name" class="form-label">Name</label>
-                  <input type="text" class="form-control form-control-lg" name="name" id="name" placeholder="Name">
-                </div>
-                <div class="mb-3">
-                  <label for="" class="form-label">Email</label>
-                  <input type="email" class="form-control form-control-lg" name="email" id="email"
-                    placeholder="abc@mail.com">
-                </div>
-                <div class="form-check form-check-inline mb-3">
-                  <label class="form-check-label" for="subscribe">
-                    <input class="form-check-input" type="checkbox" id="subscribe" value="subscribe">
-                    Subscribe to the newsletter</label>
-                </div>
-                <div class="d-grid gap-2">
-                  <button type="submit" class="btn btn-dark btn-lg">Submit</button>
-                </div>
-              </form>
-
-            </div>
-
-          </div>
-
-        </div>
-      </div>
-
-    </div>
-  </section>
 
   <footer class="py-5">
     <div class="container-fluid">
@@ -582,11 +540,9 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-6 copyright">
-          <p>© 2023 Foodmart. All rights reserved.</p>
+          <p>© 2024 Foodmart. All rights reserved.</p>
         </div>
-        <div class="col-md-6 credit-link text-start text-md-end">
-          <p>Free HTML Template <a target="_blank" href="http://www.mobanwang.com/" title="网页模板">网页模板</a></p>
-        </div>
+        
       </div>
     </div>
   </div>
