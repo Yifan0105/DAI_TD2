@@ -45,7 +45,7 @@ function updateCartDom(paniers) {
     let tbody = document.getElementById('cartItems');
     tbody.innerHTML = '';
 
-    paniers.forEach((panier, index) => {
+    paniers.forEach((panier) => {
         let price = panier.qteProduit * panier.produit.prixP;
         
         let cartInfos = document.createElement('tr');
@@ -111,13 +111,15 @@ function updateCartDom(paniers) {
     // 添加事件监听器，当数量改变时更新商品总价
     quantityInputs.forEach(quantityInput => {
         quantityInput.addEventListener('change', function(event) {
-            let index = parseInt(event.target.dataset.index);
+            let index = parseInt(event.target.dataset.index)-1;
             let newQuantity = parseInt(event.target.value);
             if (quantityInput && !isNaN(newQuantity) && newQuantity >= 0) {
                 let newPrice = newQuantity * paniers[index].produit.prixP;
                 totalPriceElements[index].textContent = newPrice + "$";
+                updatePriceElement(index, newPrice) 
                 valider()
                 displayTotalPrice();
+                console.log("Index: "  + index)
 
                 
             }
@@ -125,6 +127,17 @@ function updateCartDom(paniers) {
     });
 }
 
+
+// 添加一个函数，用于更新与商品相关的价格元素
+function updatePriceElement(index, newPrice) {
+  let priceElement = document.getElementById(`span-${index}`);
+  if (priceElement) {
+      priceElement.textContent = `${newPrice}$`;
+  }
+}
+
+
+//一个展示购物车里所有产品总价的功能
 function displayTotalPrice() {
     let paniers = document.querySelectorAll('#cartItems tr');
     let totalPrice = 0;
