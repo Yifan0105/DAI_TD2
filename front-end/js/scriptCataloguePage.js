@@ -41,17 +41,7 @@ function fetchAndLoadData(endpoint) {
   }
 
 
-loadDataWithNoCallback("products")
-    .then((produits) => {
-        // Utiliser les données récupérées
-        allProducts = produits;
-        currentProductsList = allProducts;
-        updateProductsDOM(produits, true);
-    })
-    .catch(error => {
-        // Gérer les erreurs ici
-        console.error('Une erreur est survenue lors du chargement des produits :', error);
-    });
+
 
 // Sélectionnez le conteneur de la liste de pagination
 const paginationContainer = document.querySelector('.pagination');
@@ -78,7 +68,7 @@ if (event.target.classList.contains('page-link')) {
     // Sélection des produits de la page actuelle
     const productsOnPage = currentProductsList.slice(startIndex, endIndex);
 
-    updateProductsDOM(productsOnPage, false)
+    //updateProductsDOM(productsOnPage, false)这里
 
     // Utilisez le numéro de page comme vous le souhaitez (par exemple, effectuez une action en fonction de la page sélectionnée)
     console.log('Numéro de page sélectionné :', pageNumber);
@@ -101,7 +91,7 @@ function updateCategoriesDOM(categories) {
         link.addEventListener('click', function() {
             const filteredProducts = filterProductByCategorie(category);
             console.log(filteredProducts);
-            updateProductsDOM(filteredProducts, false);
+            //updateProductsDOM(filteredProducts, false);这里
         });
   
         // Ajout du lien à l'élément <li>
