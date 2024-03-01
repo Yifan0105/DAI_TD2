@@ -153,12 +153,12 @@
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  var searchProduct = document.getElementByClass('searchValue')[0];
+  var searchProduct = document.getElementsByClassName('searchValue')[0];
   searchProduct.addEventListener('click', function() {
     let inputValue = document.getElementsByClassName('searchInput')[0].value;
     if (inputValue) {
       try {
-        //const data = await loadDataWithNoCallback(`products/search/${inputValue}`);
+        //const data = loadDataWithNoCallback(`products/search/${inputValue}`);
         //console.log(data);
         console.log("hello");
         const queryParams = new URLSearchParams();
