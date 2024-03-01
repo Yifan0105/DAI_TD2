@@ -26,7 +26,7 @@ let allProducts = [];
 
 let currentProductsList = [];
 
-let productsPerPage = 2;
+let productsPerPage = 20;
 
 let allListesCourses = [];
 
@@ -61,7 +61,7 @@ function fetchAndLoadData(endpoint) {
 
 
 
-  
+ /* 
 // Sélectionnez le conteneur de la liste de pagination
 const paginationContainer = document.querySelector('.pagination');
 
@@ -94,6 +94,7 @@ if (event.target.classList.contains('page-link')) {
     }
 });
 
+*/
 // Fonction pour mettre à jour le DOM avec les catégories
 function updateCategoriesDOM(categories) {
     
