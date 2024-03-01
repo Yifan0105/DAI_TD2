@@ -87,7 +87,7 @@ function updateCartDom(paniers) {
             </td>
             <td class="py-4">
                 <div class="total-price">
-                    <span id='span-${panier.produit.codeP}' name="money" class="money text-dark">${price}$</span>
+                    <span id='span-${panier.produit.codeP}s' name="money" class="money text-dark">${price}$</span>
                 </div>
             </td>
             <td class="py-4">
