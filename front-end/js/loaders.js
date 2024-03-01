@@ -8,7 +8,6 @@ export function loadData(endpoint, callback) {
         return response.text(); // Convertir la réponse en texte brut
       })
       .then(text => {
-        console.log('Contenu de la réponse en texte brut :', text);
         if (!text) {
           throw new Error('Empty response text');
         }
@@ -28,7 +27,6 @@ export async function loadDataWithNoCallback(endpoint) {
           throw new Error('Network response was not ok');
       }
       const text = await response.text();
-      console.log('Contenu de la réponse en texte brut :', text);
       if (!text) {
           throw new Error('Empty response text');
       }

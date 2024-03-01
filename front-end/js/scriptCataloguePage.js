@@ -6,6 +6,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Mettez vos appels de méthodes ici
     loadData("categories", updateCategoriesDOM);
     loadData("rayons", updateRayonsDOM);
+
+    loadDataWithNoCallback("listeCourses/listesCourseClient/1")
+    .then((listesCourses) => {
+        console.log(listesCourses)
+        allListesCourses = listesCourses
+        updateListecourseDOM(listesCourses)
+    }) 
+    .catch(error => {
+        // Gérer les erreurs ici
+        console.error('Une erreur :', error);
+    });
 });
 
 
@@ -15,7 +26,11 @@ let allProducts = [];
 
 let currentProductsList = [];
 
-let productsPerPage = 9;
+let productsPerPage = 2;
+
+let allListesCourses = [];
+
+
 
 loadDataWithNoCallback("products")
     .then((produits) => {
@@ -29,6 +44,7 @@ loadDataWithNoCallback("products")
         console.error('Une erreur est survenue lors du chargement des produits :', error);
     });
 
+  
 // Sélectionnez le conteneur de la liste de pagination
 const paginationContainer = document.querySelector('.pagination');
 
@@ -54,7 +70,7 @@ if (event.target.classList.contains('page-link')) {
     // Sélection des produits de la page actuelle
     const productsOnPage = currentProductsList.slice(startIndex, endIndex);
 
-    updateProductsDOM(productsOnPage, false)
+    updateProductsDOM(productsOnPage, false, true)
 
     // Utilisez le numéro de page comme vous le souhaitez (par exemple, effectuez une action en fonction de la page sélectionnée)
     console.log('Numéro de page sélectionné :', pageNumber);
@@ -133,8 +149,41 @@ function filterProductByCategorie(categorie) {
     return currentProductsList;
 }
 
+function updateListecourseDOM(listCourses) {
+    let listesCourseSelect = document.querySelector('.select-course');
+    listesCourseSelect.innerHTML = '';
+    console.log(listCourses)
+    
+    if (listesCourseSelect) {
+        
+            
+    
+            const defaultOption = document.createElement('option');
+            defaultOption.value = "";
+            defaultOption.text = "Choisissez la liste de course...";
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
+            listesCourseSelect.appendChild(defaultOption);
+        
+            listCourses.forEach(liste => {
+                console.log("plsusieurs liste")
+                const option = document.createElement('option');
+                
+                    option.value = liste.codeLC;
+                    option.text = liste.nomLC;
+                    listesCourseSelect.appendChild(option);
+                
+            });
+            
+        
+    
+    } else {
+        console.error('favoriteList element not found.');
+    }
+}
 
-function updateProductsDOM(produits, init) {
+
+function updateProductsDOM(produits, init, byPage) {
 
     let produitsList = document.getElementById('productsList');
 
@@ -146,14 +195,14 @@ function updateProductsDOM(produits, init) {
     const endIndex = startIndex + productsPerPage;
 
     // Sélection des produits de la page actuelle
-    if (init) {
-        produits = allProducts.slice(startIndex, endIndex);
-    } else {
-        produits = produits.slice(startIndex, endIndex);
+    if (!byPage) {
+        if (init) {
+            produits = allProducts.slice(startIndex, endIndex);
+        }else {
+            produits = produits.slice(startIndex, endIndex);
+        
+        }
     }
-
-
-    
 
 
     produits.forEach(product => {
@@ -165,37 +214,10 @@ function updateProductsDOM(produits, init) {
         productDiv.innerHTML = `
             <div class="product-item">
                 <!-- Bouton pour ajouter aux favoris -->
-                <a href="#" class="btn-wishlist" data-bs-toggle="modal" data-bs-target="#favoriteModal">
+                <a href="#" class="btn-add-product" data-bs-toggle="modal" data-bs-target="#addProductModal" data-product-id="${product.codeP}" data-product-name="${product.nomP}">
                 <svg width="24" height="24">
                 <use xlink:href="#heart">
                 </use></svg></a>
-
-                <!-- mondel -->
-                <div class="modal fade" id="favoriteModal" tabindex="-1" aria-labelledby="favoriteModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="favoriteModalLabel">
-                                Pour ${product.nomP} <br>
-                                Choisir une liste de courses</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-
-                            <div class="modal-body">
-                            <select class="form-select" id="favoriteList">
-                                <!-- Options added by updateListecourseDOM -->
-                            </select>
-                           </div>
-
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                <button type="button" class="btn btn-primary" id="addToFavorite">Ajouter</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>               
 
                 <!-- Image du produit -->
                 <figure>
@@ -235,6 +257,8 @@ function updateProductsDOM(produits, init) {
                 </div>
             </div>`;
 
+        
+
             // Ajouter des boutons d'augmentation et de diminution de la quantité de produit
             let quantityInput = productDiv.querySelector('.quantity');
             let plusButton = productDiv.querySelector('.quantity-right-plus');
@@ -258,8 +282,8 @@ function updateProductsDOM(produits, init) {
 
 
         // Ajout du produit au conteneur des produits
-        produitsList.appendChild(productDiv);
-
+        produitsList.appendChild(productDiv);        
+        
         // 添加事件委托，捕获所有"Add to Cart"按钮的点击事件
         produitsList.addEventListener('click', function(event) {
             if (event.target.classList.contains('add-to-cart')) {
@@ -267,25 +291,122 @@ function updateProductsDOM(produits, init) {
                 addToCart(productDiv);
             }
         });
-
-        // add to list de course
-         document.getElementById('addToFavorite').addEventListener('click', function () {
-        // obtenir list de course
-        var selectedList = document.getElementById('favoriteList').value;
-
-        // TODO: faire lien avec back end
-        console.log('Product added to favorite list: ' + selectedList);
-
-        // close
-        var favoriteModal = new bootstrap.Modal(document.getElementById('favoriteModal'));
-        favoriteModal.hide();
-    });
     });
 
 
+    let modalProductAddDiv = document.createElement('div');
+
+        // Ajout des classes à l'élément div
+        modalProductAddDiv.classList.add('modal', 'fade');
+        modalProductAddDiv.id = 'addProductModal';
+        modalProductAddDiv.tabIndex = '-1';
+        modalProductAddDiv.setAttribute('aria-labelledby', 'addProductModalLabel');
+        modalProductAddDiv.setAttribute('aria-hidden', 'true');
+
+        modalProductAddDiv.innerHTML = `
+        <!-- modal -->
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="listeCourseModalLabel">
+                                Pour <span class="product-name"></span> <br>
+                                Choisir une liste de courses</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            
+
+                            <div class="modal-body">
+                                <select class="form-select select-course">
+                                    
+                                </select>
+                            </div>
+
+                            
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                <button type="button" class="btn btn-primary addToListeCourse" >Ajouter</button>
+                            </div>
+                        </div>
+                    </div>
+        `
+
+
+
+        produitsList.append(modalProductAddDiv)
+
+        let aLinks = document.querySelectorAll('.btn-add-product');
+
+        // Ajouter un écouteur d'événements à chaque bouton
+        aLinks.forEach(a => {
+                a.addEventListener('click', function(event) {
+                // Récupérer l'ID du produit à partir de l'attribut data
+                let productId = this.getAttribute('data-product-id');
+                let productName = this.getAttribute('data-product-name');
+
+                let modalSpanProductName =  document.querySelector('#addProductModal .product-name');
+                modalSpanProductName.textContent = productName;
+                
+                let modalSuppBtn = document.querySelector('#addProductModal .addToListeCourse');
+                modalSuppBtn.setAttribute("data-product-id", productId)
+            });
+        });
+
+
+        // Sélectionner le bouton "Supprimer" dans le pop-up
+        let ajouterButton = document.querySelector('.addToListeCourse');
+        console.log(ajouterButton);
+        
+
+        // Ajouter un écouteur d'événements au clic sur le bouton "Supprimer"
+        ajouterButton.addEventListener('click', function(event) {    
+            let productId = this.getAttribute('data-product-id');
+
+            let listeId = document.querySelector('.select-course').value; 
+
+
+        let listeCourseData = {
+            codeLC: listeId
+          };
+
+        let productData = {
+            codeP: productId
+          };
+
+        let requestBody = {
+            listeCourse: listeCourseData,
+            produit: productData
+          };
+
+        // Effectuer l'appel POST à l'API
+        fetch(`http://localhost:8080/v1/listeCourses/addProduct`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestBody)
+        })
+        .then(response => {
+          if (!response.ok) {
+              throw new Error('Erreur lors de la création de la liste.');
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Traitement de la réponse de l'API si nécessaire
+          console.log('Post it supprimé avec succès :', data);
+          
+          console.log(allProducts)
+          // Fermer le pop-up après avoir effectué l'action
+          let bootstrapModal = bootstrap.Modal.getInstance(modalProductAddDiv);
+          bootstrapModal.hide();
+        })
+        .catch(error => {
+          console.error('Erreur :', error);
+        });
+
+     });
 
 }
-
 
 
 // function pour ajouter au panier
@@ -312,43 +433,6 @@ function addToCart(productElement) {
 
 
 
-//  liste_course/codec 
-loadDataWithNoCallback("liste_course/1")
-    .then((p) => {
-        console.log(p);
-        updateListecourseDOM(p);
-    }) 
-    .catch(error => {
-        // Gérer les erreurs ici
-        console.error('Une erreur :', error);
-    });
 
-function updateListecourseDOM(listCourses) {
-    console.log(listCourses)
-    var favoriteListSelect = document.getElementById('favoriteList');
-    
-    if (favoriteListSelect) {
-        favoriteListSelect.innerHTML = '';
-    
-        const defaultOption = document.createElement('option');
-        defaultOption.value = "";
-        defaultOption.text = "choisiez...";
-        defaultOption.disabled = true;
-        defaultOption.selected = true;
-        favoriteListSelect.appendChild(defaultOption);
-    
-        listCourses.forEach(item => {
-            console.log(item)
-            const option = document.createElement('option');
-            
-            
-                console.log("if")
-                option.value = item;
-                option.text = item;
-                favoriteListSelect.appendChild(option);
-            
-        });
-    } else {
-        console.error('favoriteList element not found.');
-    }
-}
+
+

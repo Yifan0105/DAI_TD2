@@ -156,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
   var searchProduct = document.getElementById('searchValue');
   searchProduct.addEventListener('click', function() {
   let inputValue = document.getElementById('searchInput').value
+  
   if (inputValue) {
       fetch(`http://localhost:8080/v1/products/search/${inputValue}`)
       .then(response => {

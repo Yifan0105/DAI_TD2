@@ -182,11 +182,11 @@
             </div>
             <div class="col-11 col-md-7">
               <form id="search-form" class="text-center" action="index.html" method="post">
-                <input type="text" class="form-control border-0 bg-transparent"
+                <input id="searchInput" type="text" class="form-control border-0 bg-transparent"
                   placeholder="Search for more than 20,000 products" />
               </form>
             </div>
-            <div class="col-1">
+            <div class="col-1" id="searchValue">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <path fill="currentColor"
                   d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z" />
@@ -344,8 +344,7 @@
       <div class="d-flex justify-content-between">
         <h1 class="page-title pb-2">Mes listes de courses</h1>
         <nav class="breadcrumb fs-6">
-          <a class="breadcrumb-item nav-link" href="#">Home</a>
-          <a class="breadcrumb-item nav-link" href="#">Pages</a>
+          <a class="breadcrumb-item nav-link" href="index.html">Accueil</a>
           <span class="breadcrumb-item active" aria-current="page">Listes de courses</span>
         </nav>
       </div>
@@ -367,109 +366,7 @@
                   <th scope="col" class="card-title text-uppercase text-muted"></th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td scope="row" class="py-4">
-                    <div class="cart-info d-flex flex-wrap align-items-center mb-4">
-                      <div class="col-lg-3">
-                        <div class="card-image">
-                          <img src="images/paniercourse.png" alt="cloth" class="img-fluid">
-                        </div>
-                      </div>
-                      <div class="col-lg-9">
-                        <div class="card-detail ps-3">
-                          <h5 class="card-title">
-                            <a href="#" class="text-decoration-none">Week-end</a>
-                          </h5>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="py-4">
-                    <div class="cart-remove">
-                      <a>
-                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#ajoutPanierModal">Ajouter au panier</button>
-                      </a>  
-                    </div>
-                  </td>
-                  <td class="py-4">
-                    <div class="cart-remove">
-                      <a href="listeex.html">
-                        <button type="button" class="btn btn-primary">consulter la liste</button>
-                      </a>  
-                    </div>
-                  </td>  
-                  
-                  <td class="py-4">
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#suppListeModal">
-                      <svg width="24" height="24">
-                        <use xlink:href="#trash"></use>
-                      </svg>
-                    </button>
-                  </td>
-                </tr>
-                
-                
-                <tr>
-                    <td scope="row" class="py-4">
-                      <div class="cart-info d-flex flex-wrap align-items-center mb-4">
-                        <div class="col-lg-3">
-                          <div class="card-image">
-                            <img src="images/paniercourse.png" alt="cloth" class="img-fluid">
-                          </div>
-                        </div>
-                        <div class="col-lg-9">
-                          <div class="card-detail ps-3">
-                            <h5 class="card-title">
-                              <a href="#" class="text-decoration-none">Semaine</a>
-                            </h5>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    
-                    <td class="py-4">
-                        <div class="cart-remove">
-                            <a href="commandeex.html">
-                                <button type="button" class="btn btn-outline-primary">Ajouter au panier</button>
-                            </a>  
-                        </div>
-                    </td>
-                    <td class="py-4">
-                        <div class="cart-remove">
-                            <a href="commandeex.html">
-                                <button type="button" class="btn btn-primary">consulter la liste</button>
-                            </a>  
-                        </div>
-                    </td>
-                    <td class="py-4">
-                      <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        <svg width="24" height="24">
-                          <use xlink:href="#trash"></use>
-                        </svg>
-                      </button>
-                    </td>
-                    
-                </tr>
-                <tr>
-                    <td scope="row" class="py-4">
-                    <p class="d-inline-flex gap-1">
-                        <a class="btn btn-secondary w-100 btn-lg" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                          Créer une nouvelle liste
-                        </a>
-                      </p>
-                      <div class="collapse" id="collapseExample">
-                        <div class="card card-body">
-                          <form id="creerliste">
-                            <label for="list-name">Nom de la liste :</label>
-                            <input type="text" id="list-name" name="list-name" required>
-                            <button type="submit" class="btn btn-success rounded-pill">Créer</button>
-                          </form>
-                        </div>
-                      </div>
-                    </td>
-                </tr>
+              <tbody id="listeCourseItems">
                   
               </tbody>
             </table>
@@ -682,6 +579,7 @@
     crossorigin="anonymous"></script>
   <script src="js/plugins.js"></script>
   <script src="js/script.js"></script>
+  <script type="module" src="js/scriptListesCoursePage.js"></script>
 </body>
 
 </html>
