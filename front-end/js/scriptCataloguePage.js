@@ -17,17 +17,31 @@ let currentProductsList = [];
 
 let productsPerPage = 9;
 
-loadDataWithNoCallback("products")
-    .then((produits) => {
+function fetchAndLoadData(endpoint) {
+    return loadDataWithNoCallback(endpoint)
+      .then((produits) => {
         // Utiliser les données récupérées
         allProducts = produits;
         currentProductsList = allProducts;
         updateProductsDOM(produits, true);
-    })
-    .catch(error => {
+      })
+      .catch(error => {
         // Gérer les erreurs ici
         console.error('Une erreur est survenue lors du chargement des produits :', error);
-    });
+      });
+  }
+  const queryParams = new URLSearchParams(window.location.search);
+  if (queryParams.has('inputValue')) {
+    const inputValue = queryParams.get('inputValue');
+    console.log("L'URL contient le paramètre inputValue:", inputValue);
+    fetchAndLoadData(`products/search/${inputValue}`);
+  } else {
+    console.log("L'URL ne contient pas le paramètre inputValue");
+    fetchAndLoadData("products");
+  }
+
+
+
 
 // Sélectionnez le conteneur de la liste de pagination
 const paginationContainer = document.querySelector('.pagination');
