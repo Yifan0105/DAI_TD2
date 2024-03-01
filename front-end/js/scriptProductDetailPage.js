@@ -69,7 +69,7 @@ loadDataWithNoCallback(`products/${productId}`)
                                     </button>
                                 </span>
         
-                                <input type="text" id="quantity" name="quantity" class="form-control input-number text-center quantity" value="1" min="1" max="100">
+                                <input type="text" name="quantity" class="form-control input-number text-center quantity" value="1" min="1" max="100">
                                 <span class="input-group-btn">
                                     <button type="button" class="quantity-right-plus btn btn-light btn-number" data-type="plus" data-field="">
                                         <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
